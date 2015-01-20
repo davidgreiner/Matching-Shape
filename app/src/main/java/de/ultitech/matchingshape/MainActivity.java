@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
 	protected static final int COLOR_MODE = 0;
 
 	// The name this app uses to identify with the server.
-	protected static final String APP_NAME = "TestApp";
+	protected static final String APP_NAME = "MatchingShape";
 
 	// The start button.
 	private Button mStartButton;
