@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ConnectionMachineExample</string>
+    <string name="startText">Connect</string>
+    <string name="instructionText">Make sure you are paired with the device "ledpi-teco". Then, click the button to connect to the LED matrix and display the pattern.</string>
+
+</resources>
