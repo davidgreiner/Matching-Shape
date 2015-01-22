@@ -44,6 +44,30 @@ public class Shape {
         }
     }
 
+    void add(Shape s)
+    {
+        for(int i = 0; i < length; i++)
+        {
+            for (int j = 0; j < length; j++)
+            {
+                if (s.getPixel(i, j) != 0)
+                    shape[i][j] = Math.min(shape[i][j] + s.getPixel(i, j), 255);
+            }
+        }
+    }
+
+    void substract(Shape s)
+    {
+        for(int i = 0; i < length; i++)
+        {
+            for (int j = 0; j < length; j++)
+            {
+                if (s.getPixel(i, j) != 0)
+                    shape[i][j] = Math.max(shape[i][j] - s.getPixel(i, j), 0);
+            }
+        }
+    }
+
     byte[] prepareScreen()
     {
         byte[] bytes = new byte[length * length];
@@ -55,5 +79,10 @@ public class Shape {
             }
         }
         return bytes;
+    }
+
+    int getPixel(int x, int y)
+    {
+        return shape[x][y];
     }
 }

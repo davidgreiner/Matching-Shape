@@ -58,12 +58,16 @@ public class MainActivity extends Activity {
 					loop = false;
 				}
 
+                Screen screen = new Screen();
                 ShapeGenerator generator = new ShapeGenerator();
-                Shape cross = generator.generateCross();
-                Shape triangle = generator.generateTriangle();
-                triangle.rotate();
-                cross.changeBrightness(125);
-                byte[] crossScreen = triangle.prepareScreen();
+                Shape T = generator.generateT();
+                Shape E = generator.generateE();
+                Shape C = generator.generateC();
+                Shape O = generator.generateO();
+                screen.addToScreen(T, 0);
+                screen.addToScreen(E, 1);
+                screen.addToScreen(C, 2);
+                screen.addToScreen(O, 3);
 
 				// Connected. Calculate and set send delay from maximum FPS.
                 // Negative maxFPS should not happen.
@@ -74,56 +78,9 @@ public class MainActivity extends Activity {
                     loop = false;
                 }
 
-                // Prepare variables for making the pattern.
-				int counter = 0;
-				int a = 255;
-				int b = 0;
-
 				// Main sending loop.
 				while (loop) {
-					//counter++;
-
-                    byte[] msgBuffer = new byte[24 * 24];
-                    //Block
-                    for(int i = 0; i < 4; i++)
-                    {
-                        //Row
-                        for(int k = 0; k < 12; k++)
-                        {
-                            //Column
-                             for (int j = 0; j < 12; j++)
-                             {
-                                 //msgBuffer[j + i * 12 * 12] = crossScreen[j];
-                                 int bottom = 0;
-                                 if(i >= 2)
-                                     bottom = 1;
-                                 msgBuffer[j + (i % 2) * 12 + k * 24 + bottom * 12 * 24] = crossScreen[j*12+k];
-                             }
-                        }
-                    }
-                    /*
-					// Change pattern every 10 frames.
-					if (counter >= 10) {
-						if (a == 255) {
-							a = 0;
-							b = 255;
-						} else {
-							a = 255;
-							b = 0;
-						}
-						counter = 0;
-					}
-
-					// Fill message buffer.
-					byte[] msgBuffer = new byte[24 * 24];
-					for (int i = 0; i < (24 * 24); i++) {
-						if (i % 2 == 1) {
-							msgBuffer[i] = (byte) a;
-						} else {
-							msgBuffer[i] = (byte) b;
-				    	}
-					}
-                    */
+                    byte[] msgBuffer = screen.drawScreen();
 					// If write fails, the connection was probably closed by the server.
 					if (!BT.write(msgBuffer)) {
 						loop = false;
