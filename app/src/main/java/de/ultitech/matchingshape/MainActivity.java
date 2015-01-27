@@ -44,15 +44,12 @@ public class MainActivity extends Activity {
             // Set up BT connection.
             BT = new LEDMatrixBTConn(this, REMOTE_BT_DEVICE_NAME, X_SIZE, Y_SIZE, COLOR_MODE, APP_NAME);
 
-            if (!BT.prepare()) {
-                alertView("You need to turn on Bluetooth");
+            if (!BT.prepare())
                 return;
-            }
 
-            if (!BT.checkIfDeviceIsPaired()) {
-                alertView("Please connect to the Connection Machine");
+            if (!BT.checkIfDeviceIsPaired())
                 return;
-            }
+
             mStartButton.setImageResource(R.drawable.ic_action_cross);
             btThread = new BTThread(BT);
             btThread.start();
@@ -73,13 +70,4 @@ public class MainActivity extends Activity {
             BT.onPause();
         }
 	}
-
-    private void alertView( String message ) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-        dialog.setTitle("Hello")
-                .setIcon(R.drawable.ic_launcher)
-                .setMessage(message).show();
-                //.setPositiveButton("Ok", NULL).show();
-    }
 }
