@@ -40,22 +40,25 @@ public class MainActivity extends Activity {
 
 
 	public void start(View v) {
-        if(appState == State.DISCONNECTED) {
-            // Set up BT connection.
-            BT = new LEDMatrixBTConn(this, REMOTE_BT_DEVICE_NAME, X_SIZE, Y_SIZE, COLOR_MODE, APP_NAME);
+        switch(appState) {
+            case DISCONNECTED:
+                // Set up BT connection.
+                BT = new LEDMatrixBTConn(this, REMOTE_BT_DEVICE_NAME, X_SIZE, Y_SIZE, COLOR_MODE, APP_NAME);
 
-            if (!BT.prepare())
-                return;
+                if (!BT.prepare())
+                    return;
 
-            if (!BT.checkIfDeviceIsPaired())
-                return;
+                if (!BT.checkIfDeviceIsPaired())
+                    return;
 
-            mStartButton.setImageResource(R.drawable.ic_action_cross);
-            btThread = new BTThread(BT);
-            btThread.start();
-            appState = State.CONNECTED;
-        } else {
-            btThread.buttonClick();
+                mStartButton.setImageResource(R.drawable.ic_action_cross);
+                btThread = new BTThread(BT);
+                btThread.start();
+                appState = State.CONNECTED;
+                break;
+            case CONNECTED:
+                btThread.buttonClick();
+                break;
         }
 	}
 
