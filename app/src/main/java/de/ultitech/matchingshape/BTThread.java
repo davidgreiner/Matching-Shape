@@ -28,16 +28,7 @@ public class BTThread extends Thread {
             loop = false;
         }
 
-        Screen screen = new Screen();
-        ShapeGenerator generator = new ShapeGenerator();
-        Shape T = generator.generateT();
-        Shape E = generator.generateE();
-        Shape C = generator.generateC();
-        Shape O = generator.generateO();
-        screen.addToScreen(T, 0);
-        screen.addToScreen(E, 1);
-        screen.addToScreen(C, 2);
-        screen.addToScreen(O, 3);
+        Game game = new Game();
 
         // Connected. Calculate and set send delay from maximum FPS.
         // Negative maxFPS should not happen.
@@ -51,13 +42,11 @@ public class BTThread extends Thread {
         // Main sending loop.
         while (loop) {
             if(button) {
-                screen.addToScreen(T, 0);
-                screen.addToScreen(E, 2);
-                screen.addToScreen(C, 1);
-                screen.addToScreen(O, 3);
+                game.buttonClicked();
                 button = false;
             }
-            byte[] msgBuffer = screen.drawScreen();
+            game.mainLoop();
+            byte[] msgBuffer = game.draw();
             // If write fails, the connection was probably closed by the server.
             if (!BT.write(msgBuffer)) {
                 loop = false;
