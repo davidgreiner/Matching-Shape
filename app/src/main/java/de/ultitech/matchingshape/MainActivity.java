@@ -57,10 +57,14 @@ public class MainActivity extends Activity {
                 appState = State.CONNECTED;
                 break;
             case CONNECTED:
-                btThread.buttonClick();
+                btThread.startClick();
                 break;
         }
 	}
+
+    public void stop(View v) {
+        btThread.stopClick();
+    }
 
 	@Override
 	public void onPause() {

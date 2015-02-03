@@ -7,18 +7,22 @@ public class BTThread extends Thread {
     private LEDMatrixBTConn BT;
     private int sendDelay;
     private boolean loop;
-    private boolean button;
+    private boolean startButton;
+    private boolean stopButton;
 
 
     public BTThread(LEDMatrixBTConn BT) {
         this.BT = BT;
-        button = false;
+        startButton = false;
+        stopButton = false;
         loop = true;
     }
 
-    public void buttonClick() {
-        button = true;
+    public void startClick() {
+        startButton = true;
     }
+
+    public void stopClick() { stopButton = true; }
 
     public void run() {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -28,7 +32,7 @@ public class BTThread extends Thread {
             loop = false;
         }
 
-        Game game = new Game();
+        Game game = new Game(new GameMode(30, 5, true, false));
 
         // Connected. Calculate and set send delay from maximum FPS.
         // Negative maxFPS should not happen.
@@ -41,9 +45,13 @@ public class BTThread extends Thread {
 
         // Main sending loop.
         while (loop) {
-            if(button) {
-                game.buttonClicked();
-                button = false;
+            if(startButton) {
+                game.startButtonClicked();
+                startButton = false;
+            }
+            if(stopButton) {
+                game.stopButtonClicked();
+                stopButton = false;
             }
             game.mainLoop();
             byte[] msgBuffer = game.draw();

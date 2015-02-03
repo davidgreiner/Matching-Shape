@@ -1,14 +1,24 @@
 package de.ultitech.matchingshape;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Random;
+
 /**
  * Created by davidgreiner on 1/27/15.
  */
 public class Game {
     private Screen screen;
     private GameMode mode;
-    private enum GameState { INTRO, PLAYING, GAMEOVER};
+    public enum GameState { INTRO, PLAYING, GAMEOVER};
     private GameState state;
     private ShapeGenerator generator;
+    private HashMap<Integer, Shape> shapePool;
+    private Random random = new Random();
+
+    private int lifes;
+    private int counter;
 
     public Game() {
         this(new GameMode());
@@ -19,29 +29,63 @@ public class Game {
         this.mode = mode;
         state = GameState.INTRO;
         generator = new ShapeGenerator();
+        shapePool = new HashMap<Integer, Shape>();
+        counter = 30;
+        lifes = 4;
+        screen.addToScreen(generator.generateT(), 0);
+        screen.addToScreen(generator.generateE(), 1);
+        screen.addToScreen(generator.generateC(), 2);
+        screen.addToScreen(generator.generateO(), 3);
+
+        for(int i = 0; i < mode.shapePool; i++) {
+            Shape s;
+            do {
+                s = generator.generateRandom(mode.allowRotate, mode.allowShift);
+            } while(shapePool.containsValue(s));
+            shapePool.put(i, s);
+        }
     }
 
     public void mainLoop() {
         switch(state) {
             case INTRO:
-                Shape T = generator.generateT();
-                Shape E = generator.generateE();
-                Shape C = generator.generateC();
-                Shape O = generator.generateO();
-                screen.addToScreen(T, 0);
-                screen.addToScreen(E, 1);
-                screen.addToScreen(C, 2);
-                screen.addToScreen(O, 3);
+                if(counter-- <= 0) {
+                    state = GameState.PLAYING;
+                }
                 break;
             case PLAYING:
-                Shape T1 = generator.generateT();
-                Shape E1 = generator.generateE();
-                Shape C1 = generator.generateC();
-                Shape O1 = generator.generateO();
-                screen.addToScreen(T1, 0);
-                screen.addToScreen(E1, 2);
-                screen.addToScreen(C1, 1);
-                screen.addToScreen(O1, 3);
+                if(counter-- <= 0) {
+                    if(getRandomBoolean(0.25f)) {
+                        // Tiles should match
+                        ArrayList<Shape> shapes = new ArrayList<Shape>();
+                        Shape s1 = shapePool.get(random.nextInt(shapePool.size()));
+                        shapes.add(s1);
+                        shapes.add(s1);
+                        Shape s2;
+                        do {
+                            s2 = shapePool.get(random.nextInt(shapePool.size()));
+                        } while(s1.equals(s2));
+                        shapes.add(s2);
+                        Shape s3;
+                        do {
+                            s3 = shapePool.get(random.nextInt(shapePool.size()));
+                        } while(s3.equals(s1) || s3.equals(s2));
+                        shapes.add(s3);
+                        for(int i = 0; i < 4; i++) {
+                            screen.addToScreen(shapes.remove(random.nextInt(shapes.size())), i);
+                        }
+                    } else {
+                        // Tiles should not match
+                        HashSet<Shape> shapes = new HashSet<Shape>();
+                        while(shapes.size() < 4)
+                            shapes.add(shapePool.get(random.nextInt(shapePool.size())));
+                        int i = 0;
+                        for(Shape s : shapes) {
+                            screen.addToScreen(s, i++);
+                        }
+                    }
+                    counter = mode.time;
+                }
                 break;
             case GAMEOVER:
                 Shape X = generator.generateCross();
@@ -57,17 +101,37 @@ public class Game {
         return screen.drawScreen();
     }
 
-    public void buttonClicked() {
+    public void startButtonClicked() {
         switch(state) {
             case INTRO:
-                state = GameState.PLAYING;
+                //state = GameState.PLAYING;
                 break;
             case PLAYING:
-                state = GameState.GAMEOVER;
+                //state = GameState.GAMEOVER;
                 break;
             case GAMEOVER:
-                state = GameState.INTRO;
+                //state = GameState.INTRO;
                 break;
         }
     }
+
+    public void stopButtonClicked() {
+        switch(state) {
+            case INTRO:
+                //state = GameState.PLAYING;
+                break;
+            case PLAYING:
+                //state = GameState.GAMEOVER;
+                break;
+            case GAMEOVER:
+                //state = GameState.INTRO;
+                break;
+        }
+    }
+
+    private boolean getRandomBoolean(float p){
+        return random.nextFloat() < p;
+    }
+
+    public GameState getState() { return state; }
 }

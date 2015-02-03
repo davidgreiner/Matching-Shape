@@ -8,9 +8,19 @@ android:layout_height="match_parent" >
         android:layout_width="158dp"
         android:layout_height="128dp"
         android:src="@drawable/ic_action_start"
+        android:onClick="stop"
+        app:cb_color="#F44336"
+        app:cb_pressedRingWidth="8dip"
+        android:id="@+id/stopButton"
+        android:layout_gravity="right|bottom" />
+
+    <at.markushi.ui.CircleButton
+        android:layout_width="158dp"
+        android:layout_height="128dp"
+        android:src="@drawable/ic_action_start"
         android:onClick="start"
-        app:cb_color="#0099CC"
+        app:cb_color="#4CAF50"
         app:cb_pressedRingWidth="8dip"
         android:id="@+id/startButton"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_gravity="left|bottom" />
 </FrameLayout>
