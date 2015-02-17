@@ -21,6 +21,7 @@ public class Game {
     private int counter;
 
     private boolean tilesMatch;
+    private boolean buttonPressed;
 
     public Game() {
         this(new GameMode());
@@ -53,10 +54,18 @@ public class Game {
             case INTRO:
                 if(--counter <= 0) {
                     state = GameState.PLAYING;
+                    generateLevel();
+                    counter = mode.time;
                 }
                 break;
             case PLAYING:
                 if(--counter <= 0) {
+                    if(!tilesMatch) {
+                        if(--lifes <= 0) {
+                            state = GameState.GAMEOVER;
+                            return;
+                        }
+                    }
                     generateLevel();
                     counter = mode.time;
                 }
@@ -81,15 +90,8 @@ public class Game {
                 state = GameState.PLAYING;
                 break;
             case PLAYING:
-                if(tilesMatch)
-                    counter = 0;
-                else
-                {
-                    if(--lifes <= 0)
-                        state = GameState.GAMEOVER;
-                    else
-                        counter = 0;
-                }
+                buttonPressed = true;
+                counter = 0;
                 break;
             case GAMEOVER:
                 state = GameState.INTRO;
