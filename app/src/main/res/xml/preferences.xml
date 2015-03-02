@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="bluetooth_settings_category"
+        android:title="@string/preferences_bluetooth_category">
+        <de.ultitech.matchingshape.DynamicListPreference
+            android:key="bluetooth_select_device"
+            android:title="@string/preferences_bluetooth_select_device_title"
+            android:summary="@string/preferences_bluetooth_select_device_summary"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preferences_category_about">
+        <Preference
+            android:key="about_button"
+            android:title="@string/preferences_button_about_title"
+            android:summary="@string/preferences_button_about_summary">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/about_url"/>
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>
