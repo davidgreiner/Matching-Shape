@@ -16,7 +16,7 @@ import de.ultitech.matchingshape.DynamicListPreference.DynamicListPreferenceOnCl
 public class SettingsActivity extends Activity {
 
     protected static final String BT_SELECT_DEVICE_KEY = "bluetooth_select_device";
-    private static final String NO_DEVICE_SELECTED = "empty";
+    protected static final String NO_DEVICE_SELECTED = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class SettingsActivity extends Activity {
                 values = new String[devices.length];
                 for (int i = 0; i < devices.length; i++) {
                     names[i] = devices[i].getName();
-                    values[i] = devices[i].getAddress();
+                    values[i] = devices[i].getName();
                 }
             }
         }
