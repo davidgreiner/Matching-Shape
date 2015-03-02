@@ -6,7 +6,8 @@
         <de.ultitech.matchingshape.DynamicListPreference
             android:key="bluetooth_select_device"
             android:title="@string/preferences_bluetooth_select_device_title"
-            android:summary="@string/preferences_bluetooth_select_device_summary"/>
+            android:summary="@string/preferences_bluetooth_select_device_summary"
+            android:defaultValue=""/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/preferences_category_about">
