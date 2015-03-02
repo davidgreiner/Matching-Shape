@@ -49,10 +49,6 @@ public class BTThread extends Thread {
                 game.startButtonClicked();
                 startButton = false;
             }
-            if(stopButton) {
-                game.stopButtonClicked();
-                stopButton = false;
-            }
             game.mainLoop();
             byte[] msgBuffer = game.draw();
             // If write fails, the connection was probably closed by the server.

@@ -99,20 +99,6 @@ public class Game {
         }
     }
 
-    public void stopButtonClicked() {
-        switch(state) {
-            case INTRO:
-                //state = GameState.PLAYING;
-                break;
-            case PLAYING:
-                //state = GameState.GAMEOVER;
-                break;
-            case GAMEOVER:
-                //state = GameState.INTRO;
-                break;
-        }
-    }
-
     private void generateLevel() {
         if(getRandomBoolean(0.25f)) {
             tilesMatch = true;
