@@ -7,11 +7,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.app.AlertDialog;
+import android.widget.ImageView;
+
+
 import at.markushi.ui.CircleButton;
 public class MainActivity extends Activity {
 
@@ -33,8 +38,21 @@ public class MainActivity extends Activity {
 	// The start button.
 	private CircleButton mStartButton;
 
+    // Life display
+    private static ImageView[] mLifes = new ImageView[4];
+
     private enum State { DISCONNECTED, CONNECTED };
     private State appState;
+
+    public static Handler UIHandler;
+
+    static
+    {
+        UIHandler = new Handler(Looper.getMainLooper());
+    }
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +63,34 @@ public class MainActivity extends Activity {
         REMOTE_BT_DEVICE_NAME = sharedPref.getString(SettingsActivity.BT_SELECT_DEVICE_KEY, "");
 
         mStartButton = (CircleButton) findViewById(R.id.startButton);
+        mLifes[0] = (ImageView) findViewById(R.id.imageView0);
+        mLifes[1] = (ImageView) findViewById(R.id.imageView1);
+        mLifes[2] = (ImageView) findViewById(R.id.imageView2);
+        mLifes[3] = (ImageView) findViewById(R.id.imageView3);
         appState = State.DISCONNECTED;
     }
 
+    public static void lifeViewSet(final int i)
+    {
+        runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                mLifes[i].setImageResource(R.drawable.ic_action_cross_red);
+            }
+        });
+    }
+
+    public static void lifeViewReset() {
+        runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                for(int i = 0; i < 4; i++)
+                {
+                     mLifes[i].setImageResource(R.drawable.ic_action_cross);
+                }
+            }
+        });
+    }
 
 	public void start(View v) {
         switch(appState) {

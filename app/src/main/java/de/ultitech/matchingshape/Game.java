@@ -64,6 +64,7 @@ public class Game {
                     if((tilesMatch && !buttonPressed) || (!tilesMatch && buttonPressed)) {
                         buttonPressed = false;
                         --lifes;
+                        MainActivity.lifeViewSet(lifes);
                         if(lifes <= 0) {
                             state = GameState.GAMEOVER;
                             Shape X = generator.generateCross();
@@ -102,6 +103,7 @@ public class Game {
                 screen.addToScreen(generator.generateE(), 1);
                 screen.addToScreen(generator.generateC(), 2);
                 screen.addToScreen(generator.generateO(), 3);
+                MainActivity.lifeViewReset();
                 counter = mode.time;
                 break;
         }
