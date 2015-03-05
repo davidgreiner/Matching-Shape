@@ -54,15 +54,23 @@ public class Game {
             case INTRO:
                 if(--counter <= 0) {
                     state = GameState.PLAYING;
+                    lifes = 4;
                     generateLevel();
                     counter = mode.time;
                 }
                 break;
             case PLAYING:
                 if(--counter <= 0) {
-                    if(!tilesMatch) {
-                        if(--lifes <= 0) {
+                    if((tilesMatch && !buttonPressed) || (!tilesMatch && buttonPressed)) {
+                        buttonPressed = false;
+                        --lifes;
+                        if(lifes <= 0) {
                             state = GameState.GAMEOVER;
+                            Shape X = generator.generateCross();
+                            screen.addToScreen(X, 0);
+                            screen.addToScreen(X, 1);
+                            screen.addToScreen(X, 2);
+                            screen.addToScreen(X, 3);
                             return;
                         }
                     }
@@ -71,11 +79,6 @@ public class Game {
                 }
                 break;
             case GAMEOVER:
-                Shape X = generator.generateCross();
-                screen.addToScreen(X, 0);
-                screen.addToScreen(X, 1);
-                screen.addToScreen(X, 2);
-                screen.addToScreen(X, 3);
                 break;
         }
     }
@@ -95,6 +98,11 @@ public class Game {
                 break;
             case GAMEOVER:
                 state = GameState.INTRO;
+                screen.addToScreen(generator.generateT(), 0);
+                screen.addToScreen(generator.generateE(), 1);
+                screen.addToScreen(generator.generateC(), 2);
+                screen.addToScreen(generator.generateO(), 3);
+                counter = mode.time;
                 break;
         }
     }
