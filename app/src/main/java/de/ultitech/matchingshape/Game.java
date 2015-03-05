@@ -11,7 +11,7 @@ import java.util.Random;
 public class Game {
     private Screen screen;
     private GameMode mode;
-    public enum GameState { INTRO, PLAYING, GAMEOVER};
+    public enum GameState { INTRO, PLAYING, GAMEOVER}
     private GameState state;
     private ShapeGenerator generator;
     private HashMap<Integer, Shape> shapePool;

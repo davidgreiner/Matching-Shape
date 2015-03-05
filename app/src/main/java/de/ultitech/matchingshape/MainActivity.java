@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
     // Life display
     private static ImageView[] mLifes = new ImageView[4];
 
-    private enum State { DISCONNECTED, CONNECTED };
+    private enum State { DISCONNECTED, CONNECTED }
     private State appState;
 
     public static Handler UIHandler;
