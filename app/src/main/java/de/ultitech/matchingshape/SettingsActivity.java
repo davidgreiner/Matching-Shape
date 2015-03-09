@@ -16,6 +16,7 @@ import de.ultitech.matchingshape.DynamicListPreference.DynamicListPreferenceOnCl
 public class SettingsActivity extends Activity {
 
     protected static final String BT_SELECT_DEVICE_KEY = "bluetooth_select_device";
+    protected static final String GAMEPLAY_VIBRATE = "vibrate";
     protected static final String NO_DEVICE_SELECTED = "";
 
     @Override

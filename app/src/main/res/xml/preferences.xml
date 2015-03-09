@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
+        android:key="gameplay_settings_category"
+        android:title="@string/gameplay_bluetooth_category">
+    <CheckBoxPreference
+        android:title="@string/preferences_gameplay_vibrate"
+        android:defaultValue="true"
+        android:summary="Vibrate on life loss"
+        android:key="vibrate" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="bluetooth_settings_category"
         android:title="@string/preferences_bluetooth_category">
         <de.ultitech.matchingshape.DynamicListPreference

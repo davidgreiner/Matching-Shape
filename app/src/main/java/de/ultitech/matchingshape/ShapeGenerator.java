@@ -171,7 +171,7 @@ public class ShapeGenerator {
         Shape s = shapes.get(random.nextInt(shapes.size()));
         if(rotate) {
             for(int i = 0; i < random.nextInt(3); i++)
-                s.rotate();
+                s = s.rotate();
         }
         return s;
     }

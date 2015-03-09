@@ -3,12 +3,14 @@ package de.ultitech.matchingshape;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +46,11 @@ public class MainActivity extends Activity {
     private enum State { DISCONNECTED, CONNECTED }
     private State appState;
 
+    private static Vibrator v;
+    private static SharedPreferences sharedPref;
+
     public static Handler UIHandler;
+
 
     static
     {
@@ -59,7 +65,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         REMOTE_BT_DEVICE_NAME = sharedPref.getString(SettingsActivity.BT_SELECT_DEVICE_KEY, "");
 
         mStartButton = (CircleButton) findViewById(R.id.startButton);
@@ -75,7 +83,11 @@ public class MainActivity extends Activity {
         runOnUI(new Runnable() {
             @Override
             public void run() {
-                mLifes[i].setImageResource(R.drawable.ic_action_cross_red);
+                if(i >= 0 && i < 4) {
+                    mLifes[i].setImageResource(R.drawable.ic_action_cross_red);
+                    if(sharedPref.getBoolean(SettingsActivity.GAMEPLAY_VIBRATE, true))
+                        v.vibrate(50);
+                }
             }
         });
     }

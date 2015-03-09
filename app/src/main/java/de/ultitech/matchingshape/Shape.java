@@ -21,7 +21,7 @@ public class Shape {
         this.shape = shape;
     }
 
-    void rotate()
+    Shape rotate()
     {
         int[][] newArray = new int[length][length];
         for(int i = 0; i < length;i++) {
@@ -29,7 +29,7 @@ public class Shape {
                 newArray[i][j] = shape[length - j - 1][i];
             }
         }
-        shape = newArray;
+        return new Shape(newArray);
     }
 
     void changeBrightness(int brightness)
