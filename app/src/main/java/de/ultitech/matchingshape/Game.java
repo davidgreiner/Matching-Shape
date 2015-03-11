@@ -38,6 +38,7 @@ public class Game {
         shapePool = new HashMap<>();
         counter = 30;
         lifes = 4;
+        MainActivity.lifeViewReset();
         screen.addToScreen(generator.generateT(), 0);
         screen.addToScreen(generator.generateE(), 1);
         screen.addToScreen(generator.generateC(), 2);
@@ -60,7 +61,6 @@ public class Game {
                 if(--counter <= 0) {
                     if((tilesMatch && !buttonPressed) || (!tilesMatch && buttonPressed)) {
                         buttonPressed = false;
-                        tilesMatch = false;
                         --lifes;
                         MainActivity.lifeViewSet(lifes);
                         if(lifes <= 0) {
@@ -70,8 +70,11 @@ public class Game {
                             screen.addToScreen(X, 1);
                             screen.addToScreen(X, 2);
                             screen.addToScreen(X, 3);
+                            MainActivity.setStart();
                             return;
                         }
+                    } else {
+                        buttonPressed = false;
                     }
                     generateLevel();
                     counter = mode.time;
@@ -104,7 +107,8 @@ public class Game {
                 MainActivity.lifeViewReset();
                 setDifficulty();
                 fillShapePool();
-                counter = mode.time;
+                MainActivity.setCross();
+                counter = 30;
                 break;
         }
     }

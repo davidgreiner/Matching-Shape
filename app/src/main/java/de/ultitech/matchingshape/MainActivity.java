@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     private BTThread btThread;
 
 	// The start button.
-	private CircleButton mStartButton;
+	private static CircleButton mStartButton;
 
     // Life display
     private static ImageView[] mLifes = new ImageView[4];
@@ -111,6 +111,24 @@ public class MainActivity extends Activity {
         });
     }
 
+    public static void setStart() {
+        runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                mStartButton.setImageResource(R.drawable.ic_action_start);
+            }
+        });
+    }
+
+    public static void setCross() {
+        runOnUI(new Runnable() {
+            @Override
+            public void run() {
+                mStartButton.setImageResource(R.drawable.ic_action_cross);
+            }
+        });
+    }
+
     public static int getDifficulty() {
         int radioButtonID = difficultyRadioButtonGroup.getCheckedRadioButtonId();
         View radioButton = difficultyRadioButtonGroup.findViewById(radioButtonID);
@@ -150,6 +168,7 @@ public class MainActivity extends Activity {
 
         appState = State.DISCONNECTED;
         mStartButton.setImageResource(R.drawable.ic_action_start);
+        lifeViewReset();
         // Avoid crash if user exits the app before pressing start.
         if (BT != null) {
             BT.onPause();
