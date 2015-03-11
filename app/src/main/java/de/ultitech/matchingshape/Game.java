@@ -1,5 +1,7 @@
 package de.ultitech.matchingshape;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,9 +32,10 @@ public class Game {
     public Game(GameMode mode) {
         screen = new Screen();
         this.mode = mode;
+        setDifficulty();
         state = GameState.INTRO;
         generator = new ShapeGenerator();
-        shapePool = new HashMap<Integer, Shape>();
+        shapePool = new HashMap<>();
         counter = 30;
         lifes = 4;
         screen.addToScreen(generator.generateT(), 0);
@@ -40,13 +43,7 @@ public class Game {
         screen.addToScreen(generator.generateC(), 2);
         screen.addToScreen(generator.generateO(), 3);
 
-        for(int i = 0; i < mode.shapePool; i++) {
-            Shape s;
-            do {
-                s = generator.generateRandom(mode.allowRotate, mode.allowShift);
-            } while(shapePool.containsValue(s));
-            shapePool.put(i, s);
-        }
+        fillShapePool();
     }
 
     public void mainLoop() {
@@ -63,6 +60,7 @@ public class Game {
                 if(--counter <= 0) {
                     if((tilesMatch && !buttonPressed) || (!tilesMatch && buttonPressed)) {
                         buttonPressed = false;
+                        tilesMatch = false;
                         --lifes;
                         MainActivity.lifeViewSet(lifes);
                         if(lifes <= 0) {
@@ -104,6 +102,8 @@ public class Game {
                 screen.addToScreen(generator.generateC(), 2);
                 screen.addToScreen(generator.generateO(), 3);
                 MainActivity.lifeViewReset();
+                setDifficulty();
+                fillShapePool();
                 counter = mode.time;
                 break;
         }
@@ -113,7 +113,7 @@ public class Game {
         if(getRandomBoolean(0.25f)) {
             tilesMatch = true;
             // Tiles should match
-            ArrayList<Shape> shapes = new ArrayList<Shape>();
+            ArrayList<Shape> shapes = new ArrayList<>();
             Shape s1 = shapePool.get(random.nextInt(shapePool.size()));
             shapes.add(s1);
             shapes.add(s1);
@@ -133,7 +133,7 @@ public class Game {
         } else {
             tilesMatch = false;
             // Tiles should not match
-            HashSet<Shape> shapes = new HashSet<Shape>();
+            HashSet<Shape> shapes = new HashSet<>();
             while(shapes.size() < 4)
                 shapes.add(shapePool.get(random.nextInt(shapePool.size())));
             int i = 0;
@@ -145,6 +145,43 @@ public class Game {
 
     private boolean getRandomBoolean(float p){
         return random.nextFloat() < p;
+    }
+
+    private void setDifficulty() {
+        switch(MainActivity.getDifficulty()) {
+            case 1:
+                Log.d("Debug", "Medium");
+                this.mode.time = 20;
+                this.mode.shapePool = 20;
+                this.mode.allowRotate = true;
+                this.mode.allowMix = false;
+                break;
+            case 2:
+                Log.d("Debug", "Hard");
+                this.mode.time = 10;
+                this.mode.shapePool = 30;
+                this.mode.allowRotate = true;
+                this.mode.allowMix = true;
+                break;
+            default:
+                Log.d("Debug", "Easy");
+                this.mode.time = 30;
+                this.mode.shapePool = 10;
+                this.mode.allowRotate = false;
+                this.mode.allowMix = false;
+                break;
+        }
+    }
+
+    private void fillShapePool() {
+        shapePool.clear();
+        for(int i = 0; i < mode.shapePool; i++) {
+            Shape s;
+            do {
+                s = generator.generateRandom(mode.allowRotate, mode.allowMix);
+            } while(shapePool.containsValue(s));
+            shapePool.put(i, s);
+        }
     }
 
     public GameState getState() { return state; }

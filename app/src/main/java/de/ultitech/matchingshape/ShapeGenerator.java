@@ -11,7 +11,7 @@ public class ShapeGenerator {
     private Random random = new Random();
 
     ShapeGenerator() {
-        shapes = new ArrayList<Shape>();
+        shapes = new ArrayList<>();
         shapes.add(generateB());
         shapes.add(generateC());
         shapes.add(generateCross());
@@ -20,6 +20,44 @@ public class ShapeGenerator {
         shapes.add(generateO());
         shapes.add(generateT());
         shapes.add(generateTriangle());
+        shapes.add(generateCube());
+        shapes.add(generateDiamond());
+    }
+
+    Shape generateDiamond()
+    {
+        return new Shape(new int[][]{
+                {0,0,0,0,0,255,255,0,0,0,0,0},
+                {0,0,0,0,255,0,0,255,0,0,0,0},
+                {0,0,0,255,0,0,0,0,255,0,0,0},
+                {0,0,255,0,0,0,0,0,0,255,0,0},
+                {0,255,0,0,0,0,0,0,0,0,255,0},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {0,255,0,0,0,0,0,0,0,0,255,0},
+                {0,0,255,0,0,0,0,0,0,255,0,0},
+                {0,0,0,255,0,0,0,0,255,0,0,0},
+                {0,0,0,0,255,0,0,255,0,0,0,0},
+                {0,0,0,0,0,255,255,0,0,0,0,0}
+        });
+    }
+
+    Shape generateCube()
+    {
+        return new Shape(new int[][]{
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,0,0,0,0,0,0,0,0,0,0,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255}
+        });
     }
 
     Shape generateCross()
@@ -166,12 +204,42 @@ public class ShapeGenerator {
         });
     }
 
-    Shape generateRandom(boolean rotate, boolean shift)
+    Shape generateFill()
+    {
+        return new Shape(new int[][]{
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255},
+                {255,255,255,255,255,255,255,255,255,255,255,255}
+        });
+    }
+
+    Shape generateRandom(boolean rotate, boolean mix)
     {
         Shape s = shapes.get(random.nextInt(shapes.size()));
         if(rotate) {
-            for(int i = 0; i < random.nextInt(3); i++)
+            for(int i = 0; i < random.nextInt(4); i++)
                 s = s.rotate();
+        }
+        if(mix) {
+            if(random.nextInt(2) == 1) {
+                Shape s2 = null;
+                while (s.equals(s2) || s2 == null)
+                    s2 = shapes.get(random.nextInt(shapes.size()));
+                s = s.add(s2);
+            } else {
+                Shape s2 = generateFill();
+                s = s2.substract(s);
+            }
+
         }
         return s;
     }

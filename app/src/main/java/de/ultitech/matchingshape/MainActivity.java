@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.app.AlertDialog;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 
 import at.markushi.ui.CircleButton;
@@ -42,6 +44,8 @@ public class MainActivity extends Activity {
 
     // Life display
     private static ImageView[] mLifes = new ImageView[4];
+
+    private static RadioGroup difficultyRadioButtonGroup;
 
     private enum State { DISCONNECTED, CONNECTED }
     private State appState;
@@ -75,7 +79,10 @@ public class MainActivity extends Activity {
         mLifes[1] = (ImageView) findViewById(R.id.imageView1);
         mLifes[2] = (ImageView) findViewById(R.id.imageView2);
         mLifes[3] = (ImageView) findViewById(R.id.imageView3);
+        difficultyRadioButtonGroup = (RadioGroup) findViewById(R.id.difficulty);
         appState = State.DISCONNECTED;
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     public static void lifeViewSet(final int i)
@@ -102,6 +109,12 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    public static int getDifficulty() {
+        int radioButtonID = difficultyRadioButtonGroup.getCheckedRadioButtonId();
+        View radioButton = difficultyRadioButtonGroup.findViewById(radioButtonID);
+        return difficultyRadioButtonGroup.indexOfChild(radioButton);
     }
 
 	public void start(View v) {
@@ -146,7 +159,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(REMOTE_BT_DEVICE_NAME == "") {
+        if(REMOTE_BT_DEVICE_NAME.equals("")) {
             new AlertDialog.Builder(this)
                     .setTitle("Set a ConnectionMachine")
                     .setMessage("Select a paired device to use this app with.")
