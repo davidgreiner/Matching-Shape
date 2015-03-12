@@ -231,9 +231,10 @@ public class ShapeGenerator {
         }
         if(mix) {
             if(random.nextInt(2) == 1) {
-                Shape s2 = null;
-                while (s.equals(s2) || s2 == null)
+                Shape s2;
+                do {
                     s2 = shapes.get(random.nextInt(shapes.size()));
+                } while (s.equals(s2));
                 s = s.add(s2);
             } else {
                 Shape s2 = generateFill();

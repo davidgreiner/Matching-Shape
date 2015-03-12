@@ -53,8 +53,7 @@ public class Shape {
         {
             for (int j = 0; j < length; j++)
             {
-                if (s.getPixel(i, j) != 0)
-                    newArray[i][j] = Math.min(shape[i][j] + s.getPixel(i, j), 255);
+                 newArray[i][j] = Math.min(shape[i][j] + s.getPixel(i, j), 255);
             }
         }
         return new Shape(newArray);
@@ -67,8 +66,7 @@ public class Shape {
         {
             for (int j = 0; j < length; j++)
             {
-                if (s.getPixel(i, j) != 0)
-                    newArray[i][j] = Math.max(shape[i][j] - s.getPixel(i, j), 0);
+                 newArray[i][j] = Math.max(shape[i][j] - s.getPixel(i, j), 0);
             }
         }
         return new Shape(newArray);
